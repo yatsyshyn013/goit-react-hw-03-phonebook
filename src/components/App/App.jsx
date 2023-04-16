@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { PhoneBookContainer } from './App.styled';
 import { ContactForm } from 'components/ContactForm/ContactForm';
 import { ContactList } from 'components/ContactList/ContactList';
 import { Filter } from 'components/Filter/Filter';
+
 
 
 
@@ -19,7 +21,7 @@ class App extends Component {
         contacts: [...prevState.contacts, newContact]
         }
       ))
-      localStorage.setItem('contact', JSON.stringify(newContact))
+      
     }
   
   
@@ -41,10 +43,31 @@ class App extends Component {
   componentDidMount() {
     const contacts = localStorage.getItem("contact");
     const parsedContacts = JSON.parse(contacts);
-    this.setState({ contacts: [parsedContacts]})
-    console.log(parsedContacts);
+
+    if (parsedContacts) {
+       this.setState({ contacts: parsedContacts})
+    // console.log(parsedContacts);
+    }
+   
   }
 
+  // componentDidUpdate(prevProps, prevState) {
+  //   const prevState = this.state.contacts;
+  //   const nextState = this.state.contacts;
+
+  //   if (prevState !== nextState) {
+  //     localStorage.setItem('contact', JSON.stringify(nextState))
+  //   }
+  // }
+
+  componentDidUpdate(prevProps, prevState) {
+    const prevContacts = prevState.contacts;
+    const nextContacts = this.state.contacts;
+
+    if (prevContacts !== nextContacts) {
+      localStorage.setItem('contact', JSON.stringify(nextContacts))
+    }
+  }
   
   render() { 
     const { filter, contacts } = this.state;
@@ -69,7 +92,13 @@ class App extends Component {
           contacts={visibleContacts}
           deleteButton={this.deleteButton}
         />
-    </PhoneBookContainer>
+        <ToastContainer
+          autoClose={3000}
+          position="top-center"
+          theme="colored"
+/>
+      </PhoneBookContainer>
+      
     );
   }
 }

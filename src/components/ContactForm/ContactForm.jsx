@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { nanoid } from 'nanoid'
 import { LabelText, ButtonForm, Label, FormComponent } from './ContactForm.styled';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 export function ContactForm({ contacts, onAddContactBtn }) {
    
@@ -30,7 +31,9 @@ export function ContactForm({ contacts, onAddContactBtn }) {
         const isDuplicate = contacts.some( contact => contact.name.toLowerCase() === data.name.toLowerCase())
 
         if (isDuplicate) {
-            alert(`${data.name} is already in contacts`)
+            // toast.error(`${data.name} is already in contacts`)
+            toast.error(`${data.name} is already in contacts`);
+            return
             
         } else {
             
@@ -69,7 +72,8 @@ export function ContactForm({ contacts, onAddContactBtn }) {
                     
                     </Label>
             <ButtonForm type="submit">Add contact</ButtonForm>
-          </FormComponent>
+            </FormComponent>
+             
       </Formik>
    )
 } 
